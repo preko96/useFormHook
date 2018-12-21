@@ -11,6 +11,11 @@ export default function useForm(props) {
   }, []);
 
   function useField(fieldProps) {
+    const { fieldName, normalize } = fieldProps;
+    useEffect(() => {
+      return () => delete formStore[formName][fieldName];
+    });
+
     const [, forceUpdate] = useState();
     const [onChange] = useState(() => e => {
       const value = e.target.value;
@@ -19,7 +24,6 @@ export default function useForm(props) {
       forceUpdate();
     });
 
-    const { fieldName, normalize } = fieldProps;
     const value =
       (formStore[formName] && formStore[formName][fieldName]) ||
       (props.initialValues && props.initialValues[fieldName]) ||
